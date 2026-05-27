@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense & Budget Visualizer</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<base target="_blank">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>Expense & Budget Visualizer</h1>
+            <button id="theme-toggle" class="theme-btn" title="Toggle Dark/Light Mode">
+                <span id="theme-icon">🌙</span>
+            </button>
+        </header>
+
+        <!-- Total Balance Card -->
+        <section class="balance-card">
+            <p class="balance-label">TOTAL BALANCE</p>
+            <p id="total-balance" class="balance-amount">$0.00</p>
+        </section>
+
+        <!-- Monthly Summary -->
+        <section class="monthly-summary" id="monthly-summary-section">
+            <h2>Monthly Summary</h2>
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <span class="summary-label">This Month</span>
+                    <span id="monthly-total" class="summary-value">$0.00</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Transactions</span>
+                    <span id="monthly-count" class="summary-value">0</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Avg/Transaction</span>
+                    <span id="monthly-avg" class="summary-value">$0.00</span>
+                </div>
+                <div class="summary-item">
+                    <span class="summary-label">Top Category</span>
+                    <span id="top-category" class="summary-value">-</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Spending Limit Alert -->
+        <section class="limit-section">
+            <div class="limit-header">
+                <h3>Spending Limit</h3>
+                <button id="edit-limit-btn" class="edit-btn">Set Limit</button>
+            </div>
+            <div class="limit-display">
+                <div class="limit-bar-container">
+                    <div id="limit-progress" class="limit-progress"></div>
+                </div>
+                <div class="limit-info">
+                    <span id="limit-spent">$0.00</span>
+                    <span id="limit-total">/ $500.00</span>
+                </div>
+            </div>
+            <div id="limit-alert" class="limit-alert hidden">
+                ⚠️ You've exceeded your spending limit!
+            </div>
+            <!-- Limit Modal -->
+            <div id="limit-modal" class="modal hidden">
+                <div class="modal-content">
+                    <h3>Set Spending Limit</h3>
+                    <input type="number" id="limit-input" placeholder="Enter limit amount" min="1">
+                    <div class="modal-buttons">
+                        <button id="save-limit-btn" class="btn-primary">Save</button>
+                        <button id="cancel-limit-btn" class="btn-secondary">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Add Transaction Form -->
+        <section class="form-section">
+            <h2>Add Transaction</h2>
+            <form id="transaction-form">
+                <div class="form-group">
+                    <label for="item-name">Item Name</label>
+                    <input type="text" id="item-name" placeholder="e.g., Coffee" required>
+                </div>
+                <div class="form-group">
+                    <label for="item-amount">Amount</label>
+                    <input type="number" id="item-amount" placeholder="0.00" min="0.01" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="item-category">Category</label>
+                    <select id="item-category" required>
+                        <option value="" disabled selected>Select category</option>
+                        <option value="Food">Food</option>
+                        <option value="Transport">Transport</option>
+                        <option value="Fun">Fun</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-add">Add Transaction</button>
+            </form>
+
+            <!-- Custom Category -->
+            <div class="custom-category-section">
+                <button id="toggle-custom-cat" class="toggle-btn">+ Add Custom Category</button>
+                <div id="custom-cat-form" class="hidden">
+                    <div class="form-group inline">
+                        <input type="text" id="new-category-name" placeholder="Category name">
+                        <input type="color" id="new-category-color" value="#3498db">
+                        <button id="add-category-btn" class="btn-small">Add</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Transactions List -->
+        <section class="transactions-section">
+            <div class="section-header">
+                <h2>Transactions</h2>
+                <div class="sort-controls">
+                    <label for="sort-by">Sort by:</label>
+                    <select id="sort-by">
+                        <option value="newest">Newest First</option>
+                        <option value="oldest">Oldest First</option>
+                        <option value="amount-high">Amount (High-Low)</option>
+                        <option value="amount-low">Amount (Low-High)</option>
+                        <option value="category">Category</option>
+                        <option value="name">Name</option>
+                    </select>
+                </div>
+            </div>
+            <div id="transactions-list" class="transactions-list">
+                <!-- Transactions rendered here -->
+            </div>
+            <div id="empty-state" class="empty-state">
+                <p>No transactions yet. Add your first expense above!</p>
+            </div>
+        </section>
+
+        <!-- Chart Section -->
+        <section class="chart-section">
+            <h2>Spending by Category</h2>
+            <div class="chart-container">
+                <canvas id="expense-chart"></canvas>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <p>Expense & Budget Visualizer</p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
